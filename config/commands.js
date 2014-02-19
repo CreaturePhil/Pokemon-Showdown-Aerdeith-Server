@@ -205,6 +205,32 @@ var commands = exports.commands = {
 			output += '<a href="/'+i+'" room="'+i+'">'+i+'</a>';
 		}
 		this.sendReply('|raw|'+output);
+
+		if (!targetUser.connected || targetUser.isAway) {
+                        this.sendReply('|raw|This user is ' + ((!targetUser.connected) ? '<font color = "red">offline</font>.' : '<font color = "orange">away</font>.'));
+        }
+        if (targetUser.canCustomSymbol ||
+        	targetUser.canFix ||
+        	targetUser.canAddPoof || 
+        	targetUser.canCustomAvatar ||
+        	targetUser.canAnimatedAvatar ||
+        	targetUser.canTrainerCard ||
+        	targetUser.canRoom ||
+        	targetUser.canVoice ||
+        	targetUser.canPlayer) {
+            var i = '';
+            if (targetUser.canCustomSymbol) i += ' Custom Symbol |';
+            if (targetUser.canFix) i += ' Fix/Alter avatar/card |';
+            if (targetUser.canAddPoof) i += ' Poof |';
+            if (targetUser.canCustomAvatar) i += ' Custom Avatar |';
+            if (targetUser.canAnimatedAvatar) i += ' Animated Avatar |';
+            if (targetUser.canTrainerCard) i += ' Trainer Card |';
+            if (targetUser.canRoom) i += ' Room |';
+            if (targetUser.canVoice) i += ' Voice |';
+            if (targetUser.canPlayer) i += ' Player |';
+
+            this.sendReply('Eligible for: ' + i);
+        }   
 	},
 
 	ipsearch: function(target, room, user) {
@@ -608,20 +634,27 @@ var commands = exports.commands = {
 		this.sendReplyBox(atkName+" is "+factor+"x effective against "+defName+".");
 	},
 
-	uptime: function(target, room, user) {
-		if (!this.canBroadcast()) return;
-		var uptime = process.uptime();
-		var uptimeText;
-		if (uptime > 24*60*60) {
-			var uptimeDays = Math.floor(uptime/(24*60*60));
-			uptimeText = ''+uptimeDays+' '+(uptimeDays == 1 ? 'day' : 'days');
-			var uptimeHours = Math.floor(uptime/(60*60)) - uptimeDays*24;
-			if (uptimeHours) uptimeText += ', '+uptimeHours+' '+(uptimeHours == 1 ? 'hour' : 'hours');
-		} else {
-			uptimeText = uptime.seconds().duration();
+	uptime: (function(){
+		function formatUptime(uptime) {
+			if (uptime > 24*60*60) {
+				var uptimeText = "";
+				var uptimeDays = Math.floor(uptime/(24*60*60));
+				uptimeText = uptimeDays + " " + (uptimeDays == 1 ? "day" : "days");
+				var uptimeHours = Math.floor(uptime/(60*60)) - uptimeDays*24;
+				if (uptimeHours) uptimeText += ", " + uptimeHours + " " + (uptimeHours == 1 ? "hour" : "hours");
+				return uptimeText;
+			} else {
+				return uptime.seconds().duration();
+			}
 		}
-		this.sendReplyBox('Uptime: <b>'+uptimeText+'</b>');
-	},
+
+		return function(target, room, user) {
+			if (!this.canBroadcast()) return;
+			var uptime = process.uptime();
+			this.sendReplyBox("Uptime: <b>" + formatUptime(uptime) + "</b>" +
+				(global.uptimeRecord ? "<br /><font color=\"green\">Record: <b>" + formatUptime(global.uptimeRecord) + "</b></font>" : ""));
+		};
+	})(),
 
 	groups: function(target, room, user) {
 		if (!this.canBroadcast()) return;

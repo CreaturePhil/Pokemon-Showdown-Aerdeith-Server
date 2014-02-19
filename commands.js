@@ -147,11 +147,12 @@ var commands = exports.commands = {
 	makechatroom: function(target, room, user) {
 		if (!this.can('makeroom')) return;
 		var id = toId(target);
-		if (!id) return this.parse('/help makechatroom');
 		if (Rooms.rooms[id]) {
 			return this.sendReply("The room '"+target+"' already exists.");
 		}
 		if (Rooms.global.addChatRoom(target)) {
+			tour.reset(id);
+			hangman.reset(id);
 			return this.sendReply("The room '"+target+"' was created.");
 		}
 		return this.sendReply("An error occurred while trying to create the room '"+target+"'.");
@@ -362,6 +363,22 @@ var commands = exports.commands = {
 		}
 		if (!user.joinRoom(targetRoom || room, connection)) {
 			return connection.sendTo(target, "|noinit|joinfailed|The room '"+target+"' could not be joined.");
+		}
+		/*********************************************************
+	 	 * Welcome Message
+	 	 *********************************************************/
+	 	if (target.toLowerCase() == "lobby") {
+			return connection.sendTo('lobby','|html|<hr/><center><img src="http://i.imgur.com/RXlWqOg.png" align="left" width="80%" height="80%"><div align="right"><strong>Useful Commands:</strong><br/>/profile<br/>/sc <br/>/servercommand<br/>/help<br/>/complaint<br>/suggest<br/>/tourcommand<br/>/guess<br/>/guessword<br/>/shop<br/>/trophyhelp</div><br/><em><b>What is the Aerdeith Server?</b></em> The Aerdeith server is a server for you to chill and hangout. You can participate in <b>tournaments</b> to <b>earn pokedollars</b> for stuff in the <b>shop</b> such as <em>custom avatars</em>, <em>trainer cards</em>, and <em>promotions</em>. In addition, you can earn <em>trophy ranks</em> by participating in tournaments and also you can participate in <b>hangman</b>!<hr/></center>');
+		}
+		if (target.toLowerCase() == "staff") {
+			return connection.sendTo('staff','|html|<div class="infobox" style="border-color:blue"><center><img src="http://fc05.deviantart.net/fs70/i/2013/188/c/a/the_water_cooler_gang_by_oweeo-d6cciay.jpg" width="100%"><br/><br/>' +
+			'<b><u>Welcome to the Staff Room!</b></u><br/><br/> This is where staff complain and laugh about users and where awesomeness happens. Not really though.' +
+			'</div></font></center>');
+		}
+		if (target.toLowerCase() == "firebotdevelopmentlab") {
+			return connection.sendTo('firebotdevelopmentlab','|html|<div class="infobox" style="border-color:blue"><center><img src="http://i.imgur.com/lnSKohC.png"><br/><br/>' +
+			'<b><u>Welcome to the Firebot Development Lab!</b></u><br/><br/> We are basically the chatroom version of <a href="http://www.smogon.com/forums/threads/rules-read-before-posting-updated-for-2013.24454/">this</a>. Also somehow Scrafty is a robot. A <i>firebot</i>...' +
+			'</div></font></center>');
 		}
 	},
 
@@ -859,13 +876,30 @@ var commands = exports.commands = {
 		this.logModCommand(user.name+' declared '+target);
 	},
 
-	gdeclare: 'globaldeclare',
-	globaldeclare: function(target, room, user) {
-		if (!target) return this.parse('/help globaldeclare');
+	gdeclarered: 'gdeclare',
+    gdeclaregreen: 'gdeclare',
+    gdeclare: function(target, room, user, connection, cmd) {
+		if (!target) return this.parse('/help '+cmd);
 		if (!this.can('gdeclare')) return false;
-
-		for (var id in Rooms.rooms) {
-			if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-blue"><b>'+target+'</b></div>');
+		var staff = '';
+		staff = 'a ' + config.groups[user.group].name;
+		if (user.group == '~') staff = 'an Administrator';
+		if (user.userid === 'creaturephil') staff = 'a Developer';
+		
+		if (cmd === 'gdeclare'){
+				for (var id in Rooms.rooms) {
+						if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-blue"><b><font size=1><i>Global declare from '+staff+'<br /></i></font size>'+target+'</b></div>');
+				}
+		}
+		if (cmd === 'gdeclarered'){
+				for (var id in Rooms.rooms) {
+						if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-red"><b><font size=1><i>Global declare from '+staff+'<br /></i></font size>'+target+'</b></div>');
+				}
+		}
+		else if (cmd === 'gdeclaregreen'){
+				for (var id in Rooms.rooms) {
+						if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-green"><b><font size=1><i>Global declare from '+staff+'<br /></i></font size>'+target+'</b></div>');
+				}
 		}
 		this.logModCommand(user.name+' globally declared '+target);
 	},
@@ -1362,9 +1396,10 @@ var commands = exports.commands = {
 	},
 
 	eval: function(target, room, user, connection, cmd, message) {
-		if (!user.hasConsoleAccess(connection)) {
+		if (!this.can('lockdown')) return false;
+		/*if (!user.hasConsoleAccess(connection)) {
 			return this.sendReply("/eval - Access denied.");
-		}
+		}*/
 		if (!this.canBroadcast()) return;
 
 		if (!this.broadcasting) this.sendReply('||>> '+target);
@@ -1589,14 +1624,12 @@ var commands = exports.commands = {
 		});
 	},
 
-	away: 'blockchallenges',
 	idle: 'blockchallenges',
 	blockchallenges: function(target, room, user) {
 		user.blockChallenges = true;
 		this.sendReply('You are now blocking all incoming challenge requests.');
 	},
 
-	back: 'allowchallenges',
 	allowchallenges: function(target, room, user) {
 		user.blockChallenges = false;
 		this.sendReply('You are available for challenges from now on.');

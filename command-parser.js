@@ -34,6 +34,8 @@ var crypto = require('crypto');
 
 var modlog = exports.modlog = modlog || {lobby: fs.createWriteStream('logs/modlog/modlog_lobby.txt', {flags:'a+'})};
 
+var complaint = exports.complaint = complaint || fs.createWriteStream('logs/complaint.txt', {flags:'a+'});
+
 /**
  * Command parser
  *
@@ -148,6 +150,9 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 				if (!modlog[room.id]) modlog[room.id] = fs.createWriteStream('logs/modlog/modlog_' + room.id + '.txt', {flags:'a+'});
 				modlog[room.id].write('['+(new Date().toJSON())+'] ('+room.id+') '+result+'\n');
 			},
+			logComplaint: function(result) {
+				complaint.write('('+room.id+') '+ user.name + ': ' +result+'\n');
+			},
 			can: function(permission, target, room) {
 				if (!user.can(permission, target, room)) {
 					this.sendReply('/'+cmd+' - Access denied.');
@@ -222,10 +227,10 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 			return connection.sendTo(room.id, 'The command "/'+cmd+'" was unrecognized. To send a message starting with "/'+cmd+'", type "//'+cmd+'".');
 		}
 	}
-
+	//numMsg increment
 	message = canTalk(user, room, connection, message);
 	if (!message) return false;
-
+	if (room && room.id === 'lobby') user.numMsg++;
 	return message;
 };
 
@@ -325,6 +330,90 @@ function canTalk(user, room, connection, message) {
 					connection.sendTo(room, "Due to spam, spoilers can't be sent to the lobby.");
 					return false;
 				}
+			}
+			/*********************************************************
+			 * Moderation Bot
+			 *********************************************************/
+			if (user.group === ' ') {
+				//bhwa stands for "Ban Hammer Words Array"
+				var bhwa = ['fuck','bitch','nigga','fag','shit','nigger'];
+				for (var i=0;i<bhwa.length;i++){
+					if (message.toLowerCase().indexOf(bhwa[i]) >= 0) {
+						user.popup(user.name+' has muted you for 7 minutes. '  + " (" + "Inappropriate word: " + bhwa[i] +")");
+						room.add('|c|'+ user.name+'|'+message);
+						room.add(''+user.name+' was muted by '+'Moderation Bot'+' for 7 minutes.' + " (" + "Inappropriate word: " + bhwa[i] +")");
+						var alts = user.getAlts();
+						if (alts.length) room.add(""+user.name+"'s alts were also muted: "+alts.join(", "));
+						room.add('|unlink|' + user.userid);
+
+						user.mute(room.id, 7*60*1000);
+						return false;
+					}
+				}
+			}
+			if (user.numMsg >= 15 && user.group === ' ') {
+				user.popup(user.name+' has muted you for 7 minutes. '+ '(spam)');
+				room.add(''+user.name+' was muted by '+'Moderation Bot'+' for 7 minutes.' + ' (spam)');
+				var alts = user.getAlts();
+				if (alts.length) room.add(""+user.name+"'s alts were also muted: "+alts.join(", "));
+				room.add('|unlink|' + user.userid);
+
+				user.mute(room.id, 7*60*1000);
+				user.numMsg=0;
+				return false;
+			} 
+			if (user.connected === false) {
+				user.numMsg = 0;
+				user.warnCounter = 0;
+			}
+			if (user.numMsg != 0){
+				setTimeout(function() {
+					user.numMsg=0;
+				}, 35000);
+			}
+			var alpha = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+			for (var i=0;i<alpha.length;i++) {
+				if(message.toUpperCase().indexOf(alpha[i]) >= 0) {
+					if (user.group === ' ' && message === message.toUpperCase() && message.length >= 4) {
+						room.add('|c|'+ user.name+'|'+message);
+						user.warnCounter++;
+						if (user.warnCounter >= 3) {
+							user.popup(user.name+' has muted you for 7 minutes. (caps)');
+							room.add(''+user.name+' was muted by '+'Moderation Bot'+' for 7 minutes.' + ' (caps)');
+							var alts = user.getAlts();
+							if (alts.length) room.add(""+user.name+"'s alts were also muted: "+alts.join(", "));
+							room.add('|unlink|' + user.userid);
+
+							user.numMsg = 0;
+							user.warnCounter = 0;
+							user.mute(room.id, 7*60*1000);
+							return false;
+						}
+						room.add(''+user.name+' was warned by '+'Moderation Bot'+'.' +  ' (caps)');
+						user.send('|c|~|/warn '+'caps');
+						return false;
+					}
+				}
+			}
+			var reStretch = new RegExp(/a{5,}|b{5,}|c{5,}|d{5,}|e{5,}|f{5,}|g{5,}|h{5,}|i{5,}|j{5,}|k{5,}|l{5,}|m{5,}|n{5,}|o{5,}|p{5,}|q{5,}|r{5,}|s{5,}|t{5,}|u{5,}|v{5,}|w{5,}|x{5,}|y{5,}|z{5,}/i);
+			if (reStretch.test(message) === true && user.group === ' ') {
+				room.add('|c|'+ user.name+'|'+message);
+				user.warnCounter++;
+				if (user.warnCounter >= 3) {
+					user.popup(user.name+' has muted you for 7 minutes. (stretching)');
+					room.add(''+user.name+' was muted by '+'Moderation Bot'+' for 7 minutes.' + ' (stretching)');
+					var alts = user.getAlts();
+					if (alts.length) room.add(""+user.name+"'s alts were also muted: "+alts.join(", "));
+					room.add('|unlink|' + user.userid);
+
+					user.numMsg = 0;
+					user.warnCounter = 0;
+					user.mute(room.id, 7*60*1000);
+					return false;
+				}
+				room.add(''+user.name+' was warned by '+'Moderation Bot'+'.' +  ' (stretching)');
+				user.send('|c|~|/warn '+'stretching');
+				return false;
 			}
 		}
 

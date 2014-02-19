@@ -281,6 +281,29 @@ var User = (function () {
 		this.userid = toUserid(this.name);
 		this.group = config.groupsranking[0];
 
+		this.warnCounter = 0;
+		this.tourWins = 0;
+
+		this.isAway = false;
+
+		this.status = '';
+		this.gender = '';
+		this.location = '';
+		this.badges = '';
+
+		//Economy.js
+		this.money = 0;
+		this.canCustomSymbol = false;
+		this.canFix = false;
+		this.canAddPoof = false;
+		this.canCustomAvatar = false;
+		this.canAnimatedAvatar = false;
+		this.canTrainerCard = false;
+		this.canRoom = false;
+		this.canVoice = false;
+		this.canPlayer = false;
+		this.hasCustomSymbol = false;
+
 		var trainersprites = [1, 2, 101, 102, 169, 170, 265, 266];
 		this.avatar = trainersprites[Math.floor(Math.random()*trainersprites.length)];
 
