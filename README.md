@@ -1,5 +1,32 @@
-Pokémon Showdown
+Pokemon Showdown - Aerdeith Server
+==================================
+
+Welcome to the github repository of the Aerdeith Pokemon server. Here are the following files that were modified or added on to the server:
+
+Modified
+---------
+    Config/commands.js
+    app.js
+    command-parser.js
+    commands.js
+    users.js
+    
+Added
+-------
+    config/profile - status.csv, gender.csv, location.csv, badges.csv
+    config/money.csv
+    src - custom-commands.js, economy.js, hangman.js, profile.js, tour.js, trainer-cards.js
+    
+Credits
+-----------
+- bandi and ifaze - some ideas such as moderation bot
+- kota - occasional help
+- Frost Server ([https://github.com/FrPSServ/Pokemon-Showdown](https://github.com/FrPSServ/Pokemon-Showdown)) - Some commands
+- Battle Tower Server ([https://github.com/kupochu/Pokemon-Showdown](https://github.com/kupochu/Pokemon-Showdown)) - Some commands
+        
+Zarel's Pokemon Showdown READ(ME 
 ========================================================================
+Link to the Pokemon Showdown's repo: [https://github.com/Zarel/Pokemon-Showdown](https://github.com/Zarel/Pokemon-Showdown)
 
 Pokémon Showdown is a simulator of Pokémon battles. It currently supports singles battles in all the games out so far (Generations 1 through 6).
 
@@ -138,3 +165,4 @@ Contributors
 - Robin Vandenbrande [Quinella] - Development
 - Samuel Teo [Yilx] - Art (main background)
 - Vivian Zou [Vtas] - Art (alternate main background)
+

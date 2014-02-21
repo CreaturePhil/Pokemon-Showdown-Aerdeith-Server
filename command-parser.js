@@ -1,3 +1,5 @@
+//mod bot below. use shortcut: moderation bot with crtl+f to find it. also don't forget the numMsg increment
+
 /**
  * Command parser
  * Pokemon Showdown - http://pokemonshowdown.com/
@@ -30,7 +32,8 @@ const MESSAGE_COOLDOWN = 5*60*1000;
 
 const MAX_PARSE_RECURSION = 10;
 
-var crypto = require('crypto');
+var crypto = require('crypto');/*
+*/
 
 var modlog = exports.modlog = modlog || {lobby: fs.createWriteStream('logs/modlog/modlog_lobby.txt', {flags:'a+'})};
 
@@ -332,7 +335,7 @@ function canTalk(user, room, connection, message) {
 				}
 			}
 			/*********************************************************
-			 * Moderation Bot
+			 * Moderation Bot - Only affects regular users and in lobby. You can modified it the way you want.
 			 *********************************************************/
 			if (user.group === ' ') {
 				//bhwa stands for "Ban Hammer Words Array"
@@ -371,6 +374,7 @@ function canTalk(user, room, connection, message) {
 					user.numMsg=0;
 				}, 35000);
 			}
+			//caps
 			var alpha = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
 			for (var i=0;i<alpha.length;i++) {
 				if(message.toUpperCase().indexOf(alpha[i]) >= 0) {
@@ -395,6 +399,7 @@ function canTalk(user, room, connection, message) {
 					}
 				}
 			}
+			//stretching
 			var reStretch = new RegExp(/a{5,}|b{5,}|c{5,}|d{5,}|e{5,}|f{5,}|g{5,}|h{5,}|i{5,}|j{5,}|k{5,}|l{5,}|m{5,}|n{5,}|o{5,}|p{5,}|q{5,}|r{5,}|s{5,}|t{5,}|u{5,}|v{5,}|w{5,}|x{5,}|y{5,}|z{5,}/i);
 			if (reStretch.test(message) === true && user.group === ' ') {
 				room.add('|c|'+ user.name+'|'+message);

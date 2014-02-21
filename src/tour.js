@@ -1,3 +1,5 @@
+//credits to frost server for this. whoever made it umm pikkacchuuu, jd, cosy?! idk either one of them give the credit.
+//modified by removing tourstats and christmas bonus.
 /*********************************************************
  * Functions
  *********************************************************/

@@ -1,3 +1,4 @@
+//credits to pikachuuuu or however you spell it
 exports.hangman = function(h) {
 	if (typeof h != "undefined") var hangman = h; else var hangman = new Object();
 	var hangmanFunctions = {

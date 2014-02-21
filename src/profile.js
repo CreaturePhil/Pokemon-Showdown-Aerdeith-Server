@@ -1,3 +1,9 @@
+/*
+* Profile created by CreaturePhil
+* Uses a whole lot of i/o with csv files
+*/
+
+
 var profile = exports.profile = {
 		readMoney: function(targetUser){
 			var money = 0;
@@ -197,8 +203,11 @@ var profile = exports.profile = {
 				log.write("\n"+uid.userid+','+uid.location);
 			}
 		},
+		//still need to add badges and remove badges commands
 		readBadges: function(targetUser){
 			/*
+			modified this to your liking. you can use numbers or letters to correspond to a badge or whatever you like.
+
 			Badges:
 			-----------
 			1 - '<img src="http://i.imgur.com/5Dy544w.png" title="is a Super Moderator">' 
@@ -289,7 +298,7 @@ var cmds = {
 		if (!targetUser.authenticated) {
 			display = avatar + unregisteredName + br + group + br + info + br + money + br + badges;
 			return this.sendReplyBox(display);
-		} else if (typeof(targetUser.avatar) === typeof('')) {
+		} else if (typeof(targetUser.avatar) === typeof('')) { //checks for custom avatar
 			display = customAvatar + name + br + group + br + info + br + money + br + badges;
 			return this.sendReplyBox(display);
 		} else {

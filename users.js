@@ -281,11 +281,13 @@ var User = (function () {
 		this.userid = toUserid(this.name);
 		this.group = config.groupsranking[0];
 
+		//mod bot
 		this.warnCounter = 0;
 		this.tourWins = 0;
 
 		this.isAway = false;
 
+		//profile.js
 		this.status = '';
 		this.gender = '';
 		this.location = '';
