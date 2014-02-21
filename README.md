@@ -19,8 +19,8 @@ Added
     
 Credits
 -----------
-Some commands - [https://github.com/FrPSServ/Pokemon-Showdown](https://github.com/FrPSServ/Pokemon-Showdown)
-Some commands - [https://github.com/kupochu/Pokemon-Showdown](https://github.com/kupochu/Pokemon-Showdown)
+- Some commands - [https://github.com/FrPSServ/Pokemon-Showdown](https://github.com/FrPSServ/Pokemon-Showdown)
+- Some commands - [https://github.com/kupochu/Pokemon-Showdown](https://github.com/kupochu/Pokemon-Showdown)
         
 Zarel's Pokemon Showdown README 
 ========================================================================
