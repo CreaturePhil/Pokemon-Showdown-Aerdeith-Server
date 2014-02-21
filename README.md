@@ -16,6 +16,11 @@ Added
     config/profile - status.csv, gender.csv, location.csv, badges.csv
     config/money.csv
     src - custom-commands.js, economy.js, hangman.js, profile.js, tour.js, trainer-cards.js
+    
+Credits
+-----------
+Some commands - [https://github.com/FrPSServ/Pokemon-Showdown](https://github.com/FrPSServ/Pokemon-Showdown)
+Some commands - [https://github.com/kupochu/Pokemon-Showdown](https://github.com/kupochu/Pokemon-Showdown)
         
 Zarel's Pokemon Showdown README 
 ========================================================================
