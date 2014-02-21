@@ -21,7 +21,7 @@ Credits
 -----------
 - bandi and ifaze - some ideas such as moderation bot
 - kota - occasional help
-- Frost Server ([https://github.com/FrPSServ/Pokemon-Showdown](https://github.com/FrPSServ/Pokemon-Showdown)) - Some commmands
+- Frost Server ([https://github.com/FrPSServ/Pokemon-Showdown](https://github.com/FrPSServ/Pokemon-Showdown)) - Some commands
 - Battle Tower Server ([https://github.com/kupochu/Pokemon-Showdown](https://github.com/kupochu/Pokemon-Showdown)) - Some commands
         
 Zarel's Pokemon Showdown READ(ME 
