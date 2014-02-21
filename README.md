@@ -17,8 +17,9 @@ Added
     config/money.csv
     src - custom-commands.js, economy.js, hangman.js, profile.js, tour.js, trainer-cards.js
         
-Zarel's Pokemon Showdown README [https://github.com/Zarel/Pokemon-Showdown](https://github.com/Zarel/Pokemon-Showdown).
+Zarel's Pokemon Showdown README 
 ========================================================================
+Link to the Pokemon Showdown's repo: [https://github.com/Zarel/Pokemon-Showdown](https://github.com/Zarel/Pokemon-Showdown)
 
 Pokémon Showdown is a simulator of Pokémon battles. It currently supports singles battles in all the games out so far (Generations 1 through 6).
 
