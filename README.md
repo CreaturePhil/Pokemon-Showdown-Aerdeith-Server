@@ -21,10 +21,10 @@ Credits
 -----------
 - bandi and ifaze - some ideas such as moderation bot
 - kota - occasional help
-- Some commands - [https://github.com/FrPSServ/Pokemon-Showdown](https://github.com/FrPSServ/Pokemon-Showdown)
-- Some commands - [https://github.com/kupochu/Pokemon-Showdown](https://github.com/kupochu/Pokemon-Showdown)
+- Frost Server ([https://github.com/FrPSServ/Pokemon-Showdown](https://github.com/FrPSServ/Pokemon-Showdown)) - Some commmands
+- Battle Tower Server ([https://github.com/kupochu/Pokemon-Showdown](https://github.com/kupochu/Pokemon-Showdown)) - Some commands
         
-Zarel's Pokemon Showdown README 
+Zarel's Pokemon Showdown READ(ME 
 ========================================================================
 Link to the Pokemon Showdown's repo: [https://github.com/Zarel/Pokemon-Showdown](https://github.com/Zarel/Pokemon-Showdown)
 
